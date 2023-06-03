@@ -140,6 +140,9 @@ class BackendController:
     async def edit_subscription(self, subscription_id: int, status: str):
         await self.subscriptions_service.change_subscription_status(subscription_id, status)
 
+    async def edit_subscription_count(self, subscription_id: int, timeline: (int, int, int)):
+        await self.subscriptions_service.edit_subscription(subscription_id, timeline)
+
     async def get_proxies(self):
         return await self.proxy_service.get_proxies()
 

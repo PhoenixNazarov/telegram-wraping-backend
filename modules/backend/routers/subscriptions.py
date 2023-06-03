@@ -21,7 +21,8 @@ class ChangeSubscriptionDto(BaseModel):
 
 class EditSubscriptionDto(BaseModel):
     subscription_id: int
-    timeline: list[int]
+    start: int
+    end: int
     count: int
 
 
@@ -47,4 +48,5 @@ async def change_subscription(request: Request, change_subscription_dto: ChangeS
 @router.post('/edit')
 async def edit_subscription(request: Request, edit_subscription_dto: EditSubscriptionDto):
     controller: BackendController = request.scope['controller']
-    return await controller.edit_subscription(edit_subscription_dto.subscription_id, change_subscription_dto.status)
+    return await controller.edit_subscription_count(edit_subscription_dto.subscription_id, (
+        edit_subscription_dto.start, edit_subscription_dto.end, edit_subscription_dto.count))
