@@ -18,6 +18,12 @@ class ChangeUserDto(BaseModel):
     categories: list[str]
 
 
+class ChangeUserCategoryDto(BaseModel):
+    user_id: int
+    categories_add: list[str]
+    categories_remove: list[str]
+
+
 class UserDto(BaseModel):
     user_id: int
 
@@ -58,6 +64,12 @@ async def get_active_accounts(request: Request):
 async def edit_inactive_accounts(request: Request):
     controller: BackendController = request.scope['controller']
     return await controller.get_accounts(active=False)
+
+
+@router.post('/change_category')
+async def edit_category_accounts(request: Request, dto: ChangeUserCategoryDto):
+    controller: BackendController = request.scope['controller']
+    return await controller.change_account_teg(dto.user_id, dto.categories_add, dto.categories_remove)
 
 
 @router.get('/active_ids')

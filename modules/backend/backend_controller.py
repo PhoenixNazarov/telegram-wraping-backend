@@ -77,6 +77,11 @@ class BackendController:
                              categories: Optional[list[str]] = None):
         await self.account_service.change_user_info(account_id, first_name, last_name, about, username, categories)
 
+    async def change_account_teg(self, account_id: int,
+                                 add_categories: Optional[list[str]] = None,
+                                 remove_categories: Optional[list[str]] = None):
+        await self.account_service.change_user_teg(account_id, add_categories, remove_categories)
+
     async def update_account(self, account_id: int):
         await self.account_service.change_user(account_id)
 
@@ -130,7 +135,8 @@ class BackendController:
     async def get_subscriptions(self):
         return await self.subscriptions_service.get_subscriptions()
 
-    async def create_subscription(self, link: str, timeline: list[(int, int, int)], categories: list[str], exclude_categories: list[str]):
+    async def create_subscription(self, link: str, timeline: list[(int, int, int)], categories: list[str],
+                                  exclude_categories: list[str]):
         if categories == ['']:
             categories = None
         if exclude_categories == ['']:

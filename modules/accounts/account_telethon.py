@@ -6,7 +6,7 @@ from typing import Optional
 from telethon import TelegramClient
 from telethon.errors import SessionRevokedError, UsernameOccupiedError, AuthKeyUnregisteredError, \
     UserAlreadyParticipantError, UserDeactivatedBanError, UsernameInvalidError, AboutTooLongError, \
-    InviteRequestSentError, ChannelsTooMuchError
+    InviteRequestSentError, ChannelsTooMuchError, UserDeactivatedError
 from telethon.tl.functions.account import UpdateProfileRequest, UpdateUsernameRequest, UpdateStatusRequest, \
     SetPrivacyRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
@@ -126,6 +126,8 @@ class AccountTelethon:
             except SessionRevokedError:
                 await self.close()
                 raise AccountBannedException('SessionRevokedError')
+            except UserDeactivatedError:
+                return
             except Exception as e:
                 print(e)
                 raise e

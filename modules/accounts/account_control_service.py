@@ -87,6 +87,22 @@ class AccountControlService:
         await account_telethon.close()
         return account
 
+    async def change_user_teg(self, account_id: int,
+                              add_categories: Optional[list[str]] = None,
+                              remove_categories: Optional[list[str]] = None):
+        account = await self.accounts_repository.get_account(account_id)
+        if not account:
+            return
+        if add_categories:
+            for i in add_categories:
+                account.categories.append(i)
+
+        if remove_categories:
+            for i in remove_categories:
+                account.categories.remove(i)
+
+        await self.accounts_repository.save_account(account)
+
     async def change_user_info(self, account_id: int,
                                first_name: Optional[str] = None,
                                last_name: Optional[str] = None,
@@ -110,6 +126,7 @@ class AccountControlService:
         try:
             account_telethon = AccountTelethon(account.session, self.proxy_service, account.categories)
             if first_name or last_name or about or username:
+                print('edit')
                 await account_telethon.edit_profile(first_name, last_name, about, username, None)
                 await account_telethon.close()
             await self.accounts_repository.save_account(account)
