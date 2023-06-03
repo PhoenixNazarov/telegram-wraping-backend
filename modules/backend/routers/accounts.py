@@ -43,7 +43,7 @@ async def import_session(request: Request):
     file = form['file']
     categories = form['categories']
     controller: BackendController = request.scope['controller']
-    out = await controller.import_session(await file.read(), categories.split(" "))
+    out = await controller.import_session(await file.read(), categories.split(","))
     if not out:
         raise HTTPException(status_code=500, detail='cant auth')
 

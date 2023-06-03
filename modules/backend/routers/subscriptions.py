@@ -11,11 +11,18 @@ class CreateSubscriptionDto(BaseModel):
     link: str
     timeline: list[list[int]]
     categories: list[str]
+    exclude_categories: list[str]
 
 
 class ChangeSubscriptionDto(BaseModel):
     subscription_id: int
     status: SubscriptionStatus
+
+
+class EditSubscriptionDto(BaseModel):
+    subscription_id: int
+    timeline: list[int]
+    count: int
 
 
 @router.get('/active')
@@ -28,10 +35,16 @@ async def get_subscriptions(request: Request):
 async def create_subscription(request: Request, start_parsing_dto: CreateSubscriptionDto):
     controller: BackendController = request.scope['controller']
     return await controller.create_subscription(start_parsing_dto.link, start_parsing_dto.timeline,
-                                                start_parsing_dto.categories)
+                                                start_parsing_dto.categories, start_parsing_dto.exclude_categories)
 
 
 @router.post('/status')
 async def change_subscription(request: Request, change_subscription_dto: ChangeSubscriptionDto):
     controller: BackendController = request.scope['controller']
     return await controller.edit_subscription(change_subscription_dto.subscription_id, change_subscription_dto.status)
+
+
+@router.post('/edit')
+async def edit_subscription(request: Request, edit_subscription_dto: EditSubscriptionDto):
+    controller: BackendController = request.scope['controller']
+    return await controller.edit_subscription(edit_subscription_dto.subscription_id, change_subscription_dto.status)

@@ -17,7 +17,7 @@ def write_if_not_exist(path, string):
 class SubscriptionRepositoryJson(SubscriptionRepository):
     def __init__(self, path: str):
         self.path = path
-        write_if_not_exist(path, '{"id": 0, "subscriptions": {}}')
+        write_if_not_exist(path, '{"id": 1, "subscriptions": {}}')
 
     def get_base(self):
         with open(self.path, 'r') as file:
@@ -32,8 +32,8 @@ class SubscriptionRepositoryJson(SubscriptionRepository):
         if not subscription.id:
             subscription.id = base['id']
             base['id'] += 1
-            for i in range(len(subscription.timeline)):
-                subscription.timeline[i].id = i
+        for i in range(len(subscription.timeline)):
+            subscription.timeline[i].id = i
         base['subscriptions'][str(subscription.id)] = subscription.json()
         self.save_base(base)
         return subscription

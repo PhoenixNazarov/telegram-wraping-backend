@@ -32,8 +32,8 @@ origins = [
     "http://localhost",
     "http://localhost:5050",
     "http://localhost:5050/",
-    "http://localhost:5174",
-    "http://localhost:5174/",
+    "http://localhost:5173",
+    "http://localhost:5173/",
     "http://85.234.106.73:5050",
     "http://85.234.106.73:5050/",
     "http://80.90.184.66:5050",
@@ -58,9 +58,3 @@ app.include_router(subscriptions.router)
 app.include_router(proxies.router)
 
 uvicorn.run(app, host=host, port=port)
-#! /bin/bash
-source ${HOME}/.bashrc
-
-cd /root/website
-export NODE_ENV=development
-npm run preview
