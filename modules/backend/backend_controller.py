@@ -153,7 +153,7 @@ class BackendController:
         return await self.proxy_service.get_proxies()
 
     async def add_proxies(self, proxy: str, categories: list[str]):
-        return await self.proxy_service.add_proxies(proxy.removesuffix("\n").split("\n"))
+        return await self.proxy_service.add_proxies(proxy.removesuffix("\n").split("\n"), categories)
 
     async def remove_proxy(self, proxy_id: int):
         return await self.proxy_service.remove_proxy(proxy_id)
