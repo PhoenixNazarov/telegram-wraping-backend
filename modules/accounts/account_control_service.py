@@ -74,7 +74,8 @@ class AccountControlService:
 
     async def check_user(self, session: str) -> Account:
         account = Account(session=session)
-        account_telethon = AccountTelethon(account.session, self.proxy_service, account.categories)
+        account_telethon = AccountTelethon(account.session, self.proxy_service, account.account_device,
+                                           account.categories)
         info = await account_telethon.get_account_information()
         account.user_id = info['user_id']
         account.phone = info['phone']
@@ -124,7 +125,8 @@ class AccountControlService:
             account.categories = categories
 
         try:
-            account_telethon = AccountTelethon(account.session, self.proxy_service, account.categories)
+            account_telethon = AccountTelethon(account.session, self.proxy_service, account.account_device,
+                                               account.categories)
             if first_name or last_name or about or username:
                 print('edit')
                 await account_telethon.edit_profile(first_name, last_name, about, username, None)
@@ -139,7 +141,8 @@ class AccountControlService:
         account = await self.accounts_repository.get_account(user_id)
         if account:
             try:
-                account_telethon = AccountTelethon(account.session, self.proxy_service, account.categories)
+                account_telethon = AccountTelethon(account.session, self.proxy_service, account.account_device,
+                                                   account.categories)
                 info = await account_telethon.get_account_information()
                 account.user_id = info['user_id']
                 account.phone = info['phone']
@@ -162,7 +165,8 @@ class AccountControlService:
             await self.accounts_repository.save_account(account)
             return False
         try:
-            account_telethon = AccountTelethon(account.session, self.proxy_service, account.categories)
+            account_telethon = AccountTelethon(account.session, self.proxy_service, account.account_device,
+                                               account.categories)
             if not name.last_name:
                 name.last_name = ''
             if not name.about:
@@ -184,14 +188,14 @@ class AccountControlService:
             await self.user_fail(user_id, e.reason)
             return False
 
-    async def subscribe_channel_by_link(self, user_id: int, link: str) -> int:
+    async def subscribe_channel_by_link(self, user_id: int, link: str, join_link: bool) -> int:
         """-1 - banned, 0 - success, 1 - already"""
         account = await self.accounts_repository.get_account(user_id)
         if not account:
             return False
         try:
-            account_t = AccountTelethon(account.session, self.proxy_service, account.categories)
-            out = await account_t.subscribe_channel_by_link(link)
+            account_t = AccountTelethon(account.session, self.proxy_service, account.account_device, account.categories)
+            out = await account_t.subscribe_channel_by_link(link, join_link)
             account.channel_join += 1
             await self.accounts_repository.save_account(account)
             await account_t.close()

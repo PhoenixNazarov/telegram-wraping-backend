@@ -9,6 +9,7 @@ router = APIRouter(prefix='/subscriptions')
 
 class CreateSubscriptionDto(BaseModel):
     link: str
+    join_link: bool
     timeline: list[list[int]]
     categories: list[str]
     exclude_categories: list[str]
@@ -35,7 +36,8 @@ async def get_subscriptions(request: Request):
 @router.post('/create')
 async def create_subscription(request: Request, start_parsing_dto: CreateSubscriptionDto):
     controller: BackendController = request.scope['controller']
-    return await controller.create_subscription(start_parsing_dto.link, start_parsing_dto.timeline,
+    return await controller.create_subscription(start_parsing_dto.link, start_parsing_dto.join_link,
+                                                start_parsing_dto.timeline,
                                                 start_parsing_dto.categories, start_parsing_dto.exclude_categories)
 
 

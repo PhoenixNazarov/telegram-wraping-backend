@@ -15,14 +15,14 @@ class SubscriptionsService:
         self.subscription_repository = subscription_repository
 
     async def create_subscription(self, link: str, timeline: list[(int, int, int)], categories: list[str] = None,
-                                  exclude_categories: list[str] = None):
+                                  exclude_categories: list[str] = None, join_link: bool = False):
         if not categories:
             categories = []
         if not exclude_categories:
             exclude_categories = []
 
         categories = list((set(categories) | set(exclude_categories)) ^ set(exclude_categories))
-        subscription = Subscription(link=link, categories=categories)
+        subscription = Subscription(link=link, join_link=join_link, categories=categories)
         for i in timeline:
             for j in range(i[2]):
                 unit = SubscriptionUnit(time_delay=random.randint(i[0], i[1]))

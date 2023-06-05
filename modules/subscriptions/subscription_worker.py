@@ -20,10 +20,13 @@ class SubscriptionWorker:
 
     async def subscribe(self, unit: SubscriptionUnit, account_id: int):
         try:
-            out = await self.account_control_service.subscribe_channel_by_link(account_id, self.subscription.link)
+            out = await self.account_control_service.subscribe_channel_by_link(account_id, self.subscription.link,
+                                                                               self.subscription.join_link)
             print(out)
-        except:
+        except Exception as e:
             print('exc')
+            out = 2
+
         if out == 0:
             await self.subscriptions_repository.change_unit_status(self.subscription.id,
                                                                    unit.id,
@@ -37,6 +40,11 @@ class SubscriptionWorker:
             await self.subscriptions_repository.add_unit(self.subscription.id,
                                                          account_id,
                                                          SubscriptionResult.already)
+        elif out == 2:
+            await self.subscriptions_repository.change_unit_status(self.subscription.id,
+                                                                   unit.id,
+                                                                   None,
+                                                                   SubscriptionResult.wait)
         else:
             await self.subscriptions_repository.change_unit_status(self.subscription.id,
                                                                    unit.id,

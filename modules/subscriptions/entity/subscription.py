@@ -28,6 +28,7 @@ class SubscriptionUnit(BaseModel):
 class Subscription(BaseModel):
     id: Optional[int]
     link: str
+    join_link: bool = True
     current_time: int = 0
     timeline: list[SubscriptionUnit] = []
 

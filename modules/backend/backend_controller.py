@@ -135,13 +135,13 @@ class BackendController:
     async def get_subscriptions(self):
         return await self.subscriptions_service.get_subscriptions()
 
-    async def create_subscription(self, link: str, timeline: list[(int, int, int)], categories: list[str],
+    async def create_subscription(self, link: str, join_link: bool, timeline: list[(int, int, int)], categories: list[str],
                                   exclude_categories: list[str]):
         if categories == ['']:
             categories = None
         if exclude_categories == ['']:
             exclude_categories = None
-        return await self.subscriptions_service.create_subscription(link, timeline, categories, exclude_categories)
+        return await self.subscriptions_service.create_subscription(link, timeline, categories, exclude_categories, join_link)
 
     async def edit_subscription(self, subscription_id: int, status: str):
         await self.subscriptions_service.change_subscription_status(subscription_id, status)
