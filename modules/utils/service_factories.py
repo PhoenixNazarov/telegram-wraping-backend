@@ -1,5 +1,7 @@
+# from modules.accounts.account_category_repository_json import AccountCategoryRepositoryJson
 from modules.accounts.account_control_service import AccountControlService
 from modules.accounts.accounts_repository_impl import AccountsRepositoryImpl
+from modules.messages.massage_service import MessageService
 from modules.names.names_repository_json import NamesRepositoryJson
 from modules.names.names_service import NamesService
 from modules.names.parsing_repository_json import ParsingRepositoryJson
@@ -10,7 +12,7 @@ from modules.proxy.proxy_service import ProxyService
 from modules.subscriptions.subscriptions_repository_json import SubscriptionRepositoryJson
 from modules.subscriptions.subscriptions_service import SubscriptionsService
 from modules.utils.config import Config
-from modules.accounts.account_category_repository_json import AccountCategoryRepositoryJson
+
 
 def create_names_service() -> NamesService:
     return NamesService(
@@ -50,4 +52,11 @@ def create_proxy_repository() -> ProxyRepository:
 def create_proxy_service() -> ProxyService:
     return ProxyService(
         create_proxy_repository()
+    )
+
+
+def create_messages_service() -> MessageService:
+    return MessageService(
+        create_account_control_service(),
+        create_proxy_service()
     )
